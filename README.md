@@ -176,8 +176,7 @@ Para que la app funcione end-to-end, es necesario configurar el backend:
 
 ## 👨‍💻 Autor
 
-Desarrollado como proyecto de automatización durante práctica profesional en **Kubi Lockers**.
-
+Matias Ramos E., Kubi Lockers 
 ---
 
 ## 📄 Licencia
