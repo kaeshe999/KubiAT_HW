@@ -1,7 +1,7 @@
 // URL del Google Apps Script Web App
 // En desarrollo, usamos el proxy de Vite (/api) para evitar CORS.
 // En producción, se usa la URL directa.
-const APPS_SCRIPT_DIRECT_URL = 'https://script.google.com/macros/s/AKfycbx3qzH0Zf_yUMyOMfxP07syQqMXaxIfXNGLcnwujRk8xHgbzrDi20UydL2FQGooMyd-XQ/exec';
+const APPS_SCRIPT_DIRECT_URL = 'https://script.google.com/macros/s/AKfycbyYx39ptxI11Ze94c0NsWrFjMYrCUVuifoJW8bVNX9QbKxcZXzFvqru3Waaw88JILHDZg/exec';
 const API_URL = import.meta.env.DEV ? '/api' : APPS_SCRIPT_DIRECT_URL;
 
 /**
@@ -31,7 +31,22 @@ export async function submitReport(formData, photos) {
             redirect: 'follow'
         });
 
-        const result = await response.json();
+        // Leer el texto de la respuesta
+        const responseText = await response.text();
+
+        // Intentar parsear como JSON
+        let result;
+        try {
+            result = JSON.parse(responseText);
+        } catch (parseError) {
+            // Google Apps Script devolvió HTML en vez de JSON (error del script)
+            // Intentar extraer el mensaje de error del HTML
+            const errorMatch = responseText.match(/Error[:\s]*(.*?)(?:<|$)/i)
+                || responseText.match(/"message":"(.*?)"/);
+            const errorMsg = errorMatch ? errorMatch[1].trim() : 'Error del servidor (respuesta no JSON)';
+            console.error('Respuesta del servidor:', responseText.substring(0, 500));
+            throw new Error(errorMsg);
+        }
 
         if (result.status === 'success') {
             return {

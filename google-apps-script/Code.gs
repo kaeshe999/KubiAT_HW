@@ -16,7 +16,7 @@
  */
 
 // ⚠️ CONFIGURAR ESTOS VALORES:
-const SPREADSHEET_ID = '1sqAhwFMkVxe7TXzr_GRsjqMfA_ua7QMg'; // ID del Google Spreadsheet maestro
+const SPREADSHEET_ID = '11rLA9GaLGu9xose2l2noYHXG9_jaYP__OdPoO6b2otMA'; // ID del Google Spreadsheet maestro
 const ROOT_FOLDER_ID = '1MuU4MD-_51C1BBs-xN_M169Jw-w0UEU5';       // ID de la carpeta raíz en Google Drive
 const SHEET_NAME = 'Seguimiento';                    // Nombre de la hoja (pestaña)
 
@@ -137,24 +137,10 @@ function setFolderPublic(folder) {
 }
 
 /**
- * Calcula el número de semana del año para una fecha dada.
- */
-function getWeekNumber(dateStr) {
-  var date = new Date(dateStr);
-  if (isNaN(date.getTime())) {
-    date = new Date();
-  }
-  var startOfYear = new Date(date.getFullYear(), 0, 1);
-  var days = Math.floor((date - startOfYear) / (24 * 60 * 60 * 1000));
-  return Math.ceil((days + startOfYear.getDay() + 1) / 7);
-}
-
-/**
- * Inserta una nueva fila en el Google Spreadsheet maestro
- * con todos los datos del reporte + el enlace a la carpeta de fotos.
+ * Inserta una nueva fila en el Google Spreadsheet maestro.
  * 
- * Columnas esperadas en el Spreadsheet (pestaña "Seguimiento"):
- * A: Semana
+ * Columnas en el Spreadsheet (pestaña "Seguimiento"):
+ * A: Semana (vacío - se llena manualmente)
  * B: Fecha
  * C: EDS
  * D: Comuna
@@ -162,8 +148,8 @@ function getWeekNumber(dateStr) {
  * F: Región
  * G: Móvil
  * H: Código BLUE
- * I: Estado final del locker
- * J: Solución
+ * I: Estado final del locker (vacío - se llena manualmente)
+ * J: Solución (vacío - se llena manualmente)
  * K: Instalado
  * L: Módulos Instalados
  * M: Estado de lockers
@@ -173,45 +159,51 @@ function getWeekNumber(dateStr) {
  * Q: Enchufado
  * R: Basura
  * S: Comentarios adicionales
- * T: Fotos (enlace a la carpeta de Drive)
+ * T: Fotos (enlace carpeta Drive)
  */
 function appendToSpreadsheet(payload, folderUrl) {
-  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
-  const sheet = ss.getSheetByName(SHEET_NAME);
-  
-  if (!sheet) {
-    throw new Error('No se encontró la hoja "' + SHEET_NAME + '" en el Spreadsheet');
+  try {
+    const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+    var sheet = ss.getSheetByName(SHEET_NAME);
+    
+    if (!sheet) {
+      Logger.log('Hoja "' + SHEET_NAME + '" no encontrada. Usando primera hoja.');
+      sheet = ss.getSheets()[0];
+    }
+    
+    const newRow = [
+      '',                              // A: Semana (se llena manualmente)
+      payload.fecha || '',             // B: Fecha
+      payload.eds || '',               // C: EDS
+      payload.comuna || '',            // D: Comuna
+      payload.direccion || '',         // E: Dirección
+      payload.region || '',            // F: Región
+      payload.movil || '',             // G: Móvil
+      payload.codigoBlue || '',        // H: Código BLUE
+      '',                              // I: Estado final del locker (se llena manualmente)
+      '',                              // J: Solución (se llena manualmente)
+      payload.instalado || '',         // K: Instalado
+      payload.modulosInstalados || '', // L: Módulos Instalados
+      payload.estadoLocker || '',      // M: Estado de lockers
+      payload.pruebas || '',           // N: Pruebas
+      payload.radier || '',            // O: Radier
+      payload.conexionElectrica || '', // P: Conexiones eléctricas
+      payload.enchufado || '',         // Q: Enchufado
+      payload.basura || '',            // R: Basura
+      payload.comentarios || '',       // S: Comentarios adicionales
+      folderUrl                        // T: Fotos
+    ];
+    
+    sheet.appendRow(newRow);
+    
+    const lastRow = sheet.getLastRow();
+    Logger.log('Fila insertada en fila: ' + lastRow);
+    
+    return lastRow;
+  } catch (error) {
+    Logger.log('Error en appendToSpreadsheet: ' + error.toString());
+    throw new Error('Error al escribir en planilla: ' + error.message);
   }
-  
-  const newRow = [
-    '',                              // A: Semana (se llena manualmente)
-    payload.fecha || '',             // B: Fecha
-    payload.eds || '',               // C: EDS
-    payload.comuna || '',            // D: Comuna
-    payload.direccion || '',         // E: Dirección
-    payload.region || '',            // F: Región
-    payload.movil || '',             // G: Móvil
-    payload.codigoBlue || '',        // H: Código BLUE
-    '',                              // I: Estado final del locker (se llena manualmente)
-    '',                              // J: Solución (se llena manualmente)
-    payload.instalado || '',         // K: Instalado
-    payload.modulosInstalados || '', // L: Módulos Instalados
-    payload.estadoLocker || '',      // M: Estado de lockers
-    payload.pruebas || '',           // N: Pruebas
-    payload.radier || '',            // O: Radier
-    payload.conexionElectrica || '', // P: Conexiones eléctricas
-    payload.enchufado || '',         // Q: Enchufado
-    payload.basura || '',            // R: Basura
-    payload.comentarios || '',       // S: Comentarios adicionales
-    folderUrl                        // T: Fotos
-  ];
-  
-  sheet.appendRow(newRow);
-  
-  const lastRow = sheet.getLastRow();
-  Logger.log('Fila insertada: ' + lastRow);
-  
-  return lastRow;
 }
 
 /**

@@ -29,7 +29,7 @@ export const MODULOS_OPTIONS = [
     '5 módulos'
 ];
 
-export const ESTADO_LOCKER_OPTIONS = ['Operativo', 'En Proceso'];
+export const ESTADO_LOCKER_OPTIONS = ['Daño visible', 'Sin comentarios'];
 
 export const PRUEBAS_OPTIONS = ['Realizadas', 'No realizadas'];
 
