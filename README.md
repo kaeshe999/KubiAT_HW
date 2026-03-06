@@ -1,6 +1,6 @@
 # 📦 Sistema de Reportes de Instalación — Kubi Lockers
 
-> Aplicación web desarrollada como proyecto de automatización durante mi práctica profesional, con el objetivo de digitalizar y automatizar el proceso de reporte de instalaciones de lockers inteligentes en terreno.
+> Aplicación web desarrollada como proyecto de automatización durante mi práctica, con el objetivo de digitalizar y automatizar el proceso de reporte de instalaciones de lockers inteligentes en terreno.
 
 ---
 
