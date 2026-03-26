@@ -1,7 +1,7 @@
 // URL del Google Apps Script Web App
 // En desarrollo, usamos el proxy de Vite (/api) para evitar CORS.
 // En producción, se usa la URL directa.
-const APPS_SCRIPT_DIRECT_URL = 'https://script.google.com/macros/s/AKfycbwgEnxPN5ugdFcT6WqO00CY7ByYZWwLYMvQL9YLzZuNadq-vqcE2xh96OPVta1nEpXnyw/exec';
+const APPS_SCRIPT_DIRECT_URL = 'https://script.google.com/macros/s/AKfycbxVZX22VVZqkoU-oskX4PBitmKz6RfNw9HcmNLlphOltr1wWRusHVsNpcXWawHBiXDgKQ/exec';
 const API_URL = import.meta.env.DEV ? '/api' : APPS_SCRIPT_DIRECT_URL;
 
 /**

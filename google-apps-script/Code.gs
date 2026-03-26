@@ -16,7 +16,7 @@
  */
 
 // ⚠️ CONFIGURAR ESTOS VALORES:
-const SPREADSHEET_ID = '11rLA9GaLGu9xose2l2noYHXG9_jaYP__OdPoO6b2otMA'; // ID del Google Spreadsheet maestro
+const SPREADSHEET_ID = '1rLA9GaLGu9xose2l2noYHXG9_jaYP__OdPoO6b2otMA'; // ID del Google Spreadsheet maestro
 const ROOT_FOLDER_ID = '1MuU4MD-_51C1BBs-xN_M169Jw-w0UEU5';       // ID de la carpeta raíz en Google Drive
 const SHEET_NAME = 'Seguimiento';                    // Nombre de la hoja (pestaña)
 
